@@ -1,3 +1,4 @@
+name: smaug
 channels:
   - conda-forge
   - bioconda
