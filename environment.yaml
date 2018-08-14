@@ -34,3 +34,4 @@ dependencies:
   - perl
   - perl-yaml-libyaml
   - perl-math-round
+  - ftputil
