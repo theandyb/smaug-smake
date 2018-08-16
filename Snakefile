@@ -123,3 +123,14 @@ rule refData_RT:
 		"reference_data/lymph_rep_time.txt"
 	shell:
 		"curl -s \"http://mccarrolllab.com/wp-content/uploads/2015/03/Koren-et-al-Table-S2.zip\" | gunzip > {output}"
+
+rule refData_recomb:
+	output:
+		"reference_data/recomb_rate.bed"
+	shell:
+		"""
+		curl -s \"http://hgdownload.cse.ucsc.edu/gbdb/hg19/decode/SexAveraged.bw\" > \"reference_data/SexAveraged.bw\"
+		bigWigToWig \"reference_data/SexAveraged.bw\" \"reference_data/SexAveraged.wig\"
+		echo \"CHR\\tSTART\\tEND\\tRATE\" > {output}
+		awk \'NR>1\' \"SexAveraged.wig\" | cat >> {output}
+		"""
