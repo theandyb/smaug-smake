@@ -1,29 +1,36 @@
 import os
 from snakemake.remote.HTTP import RemoteProvider as HTTPRemoteProvider
+from snakemake.remote.FTP import RemoteProvider as FTPRemoteProvider
+FTP = FTPRemoteProvider()
 HTTP = HTTPRemoteProvider()
 
 CHROMOSOMES = list(range(1,23))
 ALL_SOMES = CHROMOSOMES
 ALL_SOMES.extend(["X","Y"])
 
+ANCESTRAL = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2"
+ANCESTRALBASE = basename(ANCESTRAL)
+
+REFERENCEDIR = "reference_data"
+
 rule refData_hg19Lengths:
 	output:
-		"reference_data/hg19.genome"
+		"{REFERENCEDIR}/hg19.genome"
 	shell:
 		"curl -s https://genome.ucsc.edu/goldenpath/help/hg19.chrom.sizes > {output}"
 
 rule refData_1000GStrictMask:
 	input:
-		"reference_data/hg19.genome"
+		"{REFERENCEDIR}/hg19.genome"
 	output:
-		"reference_data/testmask2.bed"
+		"{REFERENCEDIR}/testmask2.bed"
 	shell:
 		"curl -s  ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/accessible_genome_masks/20140520.strict_mask.autosomes.bed | "
 		"bedtools complement -i - -g {input} | bedtools sort | awk 'match($1, /chr[0-9]+$/) {{print $0}}' > {output}"
 
 rule refData_refGenome:
 	output:
-		"reference_data/human_g1k_v37/human_g1k_v37.fasta"
+		"{REFERENCEDIR}/human_g1k_v37/human_g1k_v37.fasta"
 	shell:
 		"""
 		set +e
@@ -38,35 +45,39 @@ rule refData_refGenome:
 		"""
 rule refData_mask_v37:
 	input:
-		fasta = "reference_data/human_g1k_v37/human_g1k_v37.fasta",
-		bed = "reference_data/testmask2.bed"
+		fasta = "{REFERENCEDIR}/human_g1k_v37/human_g1k_v37.fasta",
+		bed = "{REFERENCEDIR}/testmask2.bed"
 	output:
-		"reference_data/human_g1k_v37_mask/human_g1k_v37.premask.fasta"
+		"{REFERENCEDIR}/human_g1k_v37_mask/human_g1k_v37.premask.fasta"
 	shell:
 		"bedtools maskfasta -fi {input.fasta} -bed {input.bed} -fo {output}"
 
-rule refData_ancestralGenome:
+rule refData_getAncestral:
+	input:
+		FTP.remote(ANCESTRAL, keep_local=True)
 	output:
-		expand("reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chromosome}.fa", chromosome=ALL_SOMES),
-		expand("reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chromosome}.bed", chromosome=ALL_SOMES),
-		"reference_data/human_ancestor_GRCh37_e59/README",
-		"reference_data/human_ancestor_GRCh37_e59/README.txt",
-		"reference_data/human_ancestor_GRCh37_e59/summary.txt"
+		temp(join(REFERENCEDIR, ANCESTRALBASE))
 	shell:
-		"""
-		curl -s http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2 > reference_data/human_ancestor_GRCh37_e59.tar.bz2
-		tar -vjxf reference_data/human_ancestor_GRCh37_e59.tar.bz2
-		"""
+		"mv {input} {output}"
+
+rule refData_decompressAncestral:
+	input:
+		join(REFERENCEDIR, ANCESTRALBASE)
+	output:
+		join(REFERENCEDIR, ANCESTRALBASE.replace(".gz", ""))
+	shell:
+		"gunzip -c {input} > {output}"
+
 
 rule refData_fixedWidthWindows:
 	input:
-		"reference_data/hg19.genome"
+		"{REFERENCEDIR}/hg19.genome"
 	output:
-		win1000= "reference_data/genome.1000kb.sorted.bed",
-		win5000 = "reference_data/genome.5000kb.sorted.bed",
-		win100 = "reference_data/genome.100kb.sorted.bed",
-		win10 = "reference_data/genome.10kb.sorted.bed",
-		winFull = "reference_data/genome.full.sorted.bed"
+		win1000= "{REFERENCEDIR}/genome.1000kb.sorted.bed",
+		win5000 = "{REFERENCEDIR}/genome.5000kb.sorted.bed",
+		win100 = "{REFERENCEDIR}/genome.100kb.sorted.bed",
+		win10 = "{REFERENCEDIR}/genome.10kb.sorted.bed",
+		winFull = "{REFERENCEDIR}/genome.full.sorted.bed"
 	shell:
 		"""
 		bedtools makewindows -g {input} -w 1000000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win1000} &&
@@ -78,15 +89,15 @@ rule refData_fixedWidthWindows:
 
 rule refData_gcContent:
 	input:
-		fasta = "reference_data/human_g1k_v37/human_g1k_v37.fasta",
-		bed = "reference_data/genome.10kb.sorted.bed"
+		fasta = "{REFERENCEDIR}/human_g1k_v37/human_g1k_v37.fasta",
+		bed = "{REFERENCEDIR}/genome.10kb.sorted.bed"
 	output:
-		"reference_data/gc10kb.bed"
+		"{REFERENCEDIR}/gc10kb.bed"
 	shell:
 		"sed s/chr// {input.bed} | bedtools nuc -fi {input.fasta} -bed - > {output}"
 
 rule refData_cpgIslands:
 	output:
-		"reference_data/cpg_islands_sorted.bed"
+		"{REFERENCEDIR}/cpg_islands_sorted.bed"
 	shell:
 		"curl -s  http://web.stanford.edu/class/bios221/data/model-based-cpg-islands-hg19.txt | awk \'NR>1\' | sort -k1,1 -k2,2n > {output}"
