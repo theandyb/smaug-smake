@@ -84,3 +84,9 @@ rule refData_gcContent:
 		"reference_data/gc10kb.bed"
 	shell:
 		"sed s/chr// {input.bed} | bedtools nuc -fi {input.fasta} -bed - > {output}"
+
+rule refData_cpgIslands:
+	output:
+		"reference_data/cpg_islands_sorted.bed"
+	shell:
+		"curl -s  http://web.stanford.edu/class/bios221/data/model-based-cpg-islands-hg19.txt | awk \'NR>1\' | sort -k1,1 -k2,2n > {output}"
