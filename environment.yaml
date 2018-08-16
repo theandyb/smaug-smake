@@ -35,3 +35,4 @@ dependencies:
   - perl-yaml-libyaml
   - perl-math-round
   - ftputil
+  - ucsc-bigwigtowig
