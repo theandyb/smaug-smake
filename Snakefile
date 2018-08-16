@@ -13,6 +13,14 @@ ANCESTRALBASE = basename(ANCESTRAL)
 
 REFERENCEDIR = "reference_data"
 
+rule all:
+	input:
+		"{REFERENCEDIR}/genome.1000kb.sorted.bed",
+		"{REFERENCEDIR}/genome.5000kb.sorted.bed",
+		"{REFERENCEDIR}/genome.100kb.sorted.bed",
+		"{REFERENCEDIR}/genome.10kb.sorted.bed",
+		"{REFERENCEDIR}/genome.full.sorted.bed"
+
 rule refData_hg19Lengths:
 	output:
 		"{REFERENCEDIR}/hg19.genome"
@@ -73,17 +81,17 @@ rule refData_fixedWidthWindows:
 	input:
 		"{REFERENCEDIR}/hg19.genome"
 	output:
-		win1000= "{REFERENCEDIR}/genome.1000kb.sorted.bed",
+		win1000 = "{REFERENCEDIR}/genome.1000kb.sorted.bed",
 		win5000 = "{REFERENCEDIR}/genome.5000kb.sorted.bed",
 		win100 = "{REFERENCEDIR}/genome.100kb.sorted.bed",
 		win10 = "{REFERENCEDIR}/genome.10kb.sorted.bed",
 		winFull = "{REFERENCEDIR}/genome.full.sorted.bed"
 	shell:
 		"""
-		bedtools makewindows -g {input} -w 1000000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win1000} &&
-		bedtools makewindows -g {input} -w 5000000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win5000} &&
-		bedtools makewindows -g {input} -w 100000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win100} &&
-		bedtools makewindows -g {input} -w 10000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win10} &&
+		bedtools makewindows -g {input} -w 1000000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win1000}
+		bedtools makewindows -g {input} -w 5000000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win5000}
+		bedtools makewindows -g {input} -w 100000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win100}
+		bedtools makewindows -g {input} -w 10000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win10}
 		bedtools makewindows -g {input} -w 3000000000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.winFull}
 		"""
 
