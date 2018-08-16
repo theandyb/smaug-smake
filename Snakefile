@@ -111,3 +111,9 @@ rule refData_lamin:
 		"reference_data/lamin_B1_LADS2.bed"
 	shell:
 		"curl -s  \"http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/laminB1Lads.txt.gz\" | gunzip | awk \'NR>1 {{print $2\"\\t\"$3\"\\t\"$4}}\' | bedtools sort -i - > {output}"
+
+rule refData_DNase:
+	output:
+		"reference_data/DHS.bed"
+	shell:
+		"curl -s \"http://hgdownload.cse.ucsc.edu/goldenpath/hg19/encodeDCC/wgEncodeRegDnaseClustered/wgEncodeRegDnaseClusteredV3.bed.gz\" | gunzip | cut -f1-3 | bedtools sort -i - > {output}"
