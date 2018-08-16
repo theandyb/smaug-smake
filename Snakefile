@@ -64,7 +64,7 @@ rule refData_decompressAncestral:
 	input:
 		join(REFERENCEDIR, ANCESTRALBASE)
 	output:
-		join(REFERENCEDIR, ANCESTRALBASE.replace(".tar.bz2", ""))
+		directory(join(REFERENCEDIR, ANCESTRALBASE.replace(".tar.bz2", "")))
 	shell:
 		"tar -xjf {input} -C {REFERENCEDIR}"
 
