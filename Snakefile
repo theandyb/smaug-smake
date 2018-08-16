@@ -68,12 +68,13 @@ rule refData_fixedWidthWindows:
 		win10 = "reference_data/genome.10kb.sorted.bed",
 		winFull = "reference_data/genome.full.sorted.bed"
 	shell:
-		"bedtools makewindows -g {input} -w 1000000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win1000} && "
-		"bedtools makewindows -g {input} -w 5000000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win5000} && "
-		"bedtools makewindows -g {input} -w 100000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win100} && "
-		"bedtools makewindows -g {input} -w 10000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win10} && "
-		"bedtools makewindows -g {input} -w 3000000000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.winFull}"
-
+		"""
+		bedtools makewindows -g {input} -w 1000000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win1000} &&
+		bedtools makewindows -g {input} -w 5000000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win5000} &&
+		bedtools makewindows -g {input} -w 100000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win100} &&
+		bedtools makewindows -g {input} -w 10000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win10} &&
+		bedtools makewindows -g {input} -w 3000000000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.winFull}
+		"""
 
 rule refData_gcContent:
 	input:
