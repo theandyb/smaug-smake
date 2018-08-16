@@ -64,9 +64,9 @@ rule refData_decompressAncestral:
 	input:
 		join(REFERENCEDIR, ANCESTRALBASE)
 	output:
-		join(REFERENCEDIR, ANCESTRALBASE.replace(".gz", ""))
+		join(REFERENCEDIR, ANCESTRALBASE.replace(".tar.bz2", ""))
 	shell:
-		"gunzip -c {input} > {output}"
+		"tar -xjf {input} > {output}"
 
 
 rule refData_fixedWidthWindows:
