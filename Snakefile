@@ -15,11 +15,11 @@ REFERENCEDIR = "reference_data"
 
 rule all:
 	input:
-		"{REFERENCEDIR}/genome.1000kb.sorted.bed",
-		"{REFERENCEDIR}/genome.5000kb.sorted.bed",
-		"{REFERENCEDIR}/genome.100kb.sorted.bed",
-		"{REFERENCEDIR}/genome.10kb.sorted.bed",
-		"{REFERENCEDIR}/genome.full.sorted.bed"
+		"reference_data/genome.1000kb.sorted.bed",
+		"reference_data/genome.5000kb.sorted.bed",
+		"reference_data/genome.100kb.sorted.bed",
+		"reference_data/genome.10kb.sorted.bed",
+		"reference_data/genome.full.sorted.bed"
 
 rule refData_hg19Lengths:
 	output:
