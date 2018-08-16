@@ -1,4 +1,4 @@
-import os
+from os.path import join, basename
 from snakemake.remote.HTTP import RemoteProvider as HTTPRemoteProvider
 from snakemake.remote.FTP import RemoteProvider as FTPRemoteProvider
 FTP = FTPRemoteProvider()
@@ -9,7 +9,7 @@ ALL_SOMES = CHROMOSOMES
 ALL_SOMES.extend(["X","Y"])
 
 ANCESTRAL = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2"
-ANCESTRALBASE = os.basename(ANCESTRAL)
+ANCESTRALBASE = basename(ANCESTRAL)
 
 REFERENCEDIR = "reference_data"
 
