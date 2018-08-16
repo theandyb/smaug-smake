@@ -9,7 +9,7 @@ ALL_SOMES = CHROMOSOMES
 ALL_SOMES.extend(["X","Y"])
 
 ANCESTRAL = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2"
-ANCESTRALBASE = basename(ANCESTRAL)
+ANCESTRALBASE = os.basename(ANCESTRAL)
 
 REFERENCEDIR = "reference_data"
 
