@@ -66,7 +66,7 @@ rule refData_decompressAncestral:
 	output:
 		join(REFERENCEDIR, ANCESTRALBASE.replace(".tar.bz2", ""))
 	shell:
-		"tar -xjf {input}"
+		"tar -xjf {input} -C {REFERENCEDIR}"
 
 
 rule refData_fixedWidthWindows:
