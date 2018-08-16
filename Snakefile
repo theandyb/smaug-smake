@@ -132,5 +132,5 @@ rule refData_recomb:
 		curl -s \"http://hgdownload.cse.ucsc.edu/gbdb/hg19/decode/SexAveraged.bw\" > \"reference_data/SexAveraged.bw\"
 		bigWigToWig \"reference_data/SexAveraged.bw\" \"reference_data/SexAveraged.wig\"
 		echo \"CHR\\tSTART\\tEND\\tRATE\" > {output}
-		awk \'NR>1\' \"SexAveraged.wig\" | cat >> {output}
+		awk \'NR>1\' \"reference_data/SexAveraged.wig\" | cat >> {output}
 		"""
