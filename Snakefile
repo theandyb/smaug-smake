@@ -1,4 +1,4 @@
-import os 
+import os
 from snakemake.remote.HTTP import RemoteProvider as HTTPRemoteProvider
 HTTP = HTTPRemoteProvider()
 
@@ -53,9 +53,10 @@ rule refData_ancestralGenome:
 		"reference_data/human_ancestor_GRCh37_e59/README.txt",
 		"reference_data/human_ancestor_GRCh37_e59/summary.txt"
 	shell:
-		"curl -s http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2 > "
-		"reference_data/human_ancestor_GRCh37_e59.tar.bz2 && "
-		"tar -vjxf reference_data/human_ancestor_GRCh37_e59.tar.bz2"
+		"""
+		curl -s http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2 > reference_data/human_ancestor_GRCh37_e59.tar.bz2
+		tar -vjxf reference_data/human_ancestor_GRCh37_e59.tar.bz2
+		"""
 
 rule refData_fixedWidthWindows:
 	input:
@@ -71,8 +72,8 @@ rule refData_fixedWidthWindows:
 		"bedtools makewindows -g {input} -w 5000000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win5000} && "
 		"bedtools makewindows -g {input} -w 100000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win100} && "
 		"bedtools makewindows -g {input} -w 10000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win10} && "
-		"bedtools makewindows -g {input} -w 3000000000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.winFull}" 
-	
+		"bedtools makewindows -g {input} -w 3000000000 | grep \"-Ev _|X|Y|M\" | sort -k 1,1 -k2,2n > {output.winFull}"
+
 
 rule refData_gcContent:
 	input:
