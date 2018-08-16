@@ -117,3 +117,9 @@ rule refData_DNase:
 		"reference_data/DHS.bed"
 	shell:
 		"curl -s \"http://hgdownload.cse.ucsc.edu/goldenpath/hg19/encodeDCC/wgEncodeRegDnaseClustered/wgEncodeRegDnaseClusteredV3.bed.gz\" | gunzip | cut -f1-3 | bedtools sort -i - > {output}"
+
+rule refData_RT:
+	output:
+		"reference_data/lymph_rep_time.txt"
+	shell:
+		"curl -s \"http://mccarrolllab.com/wp-content/uploads/2015/03/Koren-et-al-Table-S2.zip\" | gunzip > {output}"
