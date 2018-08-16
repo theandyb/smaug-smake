@@ -11,30 +11,29 @@ ALL_SOMES.extend(["X","Y"])
 ANCESTRAL = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2"
 ANCESTRALBASE = basename(ANCESTRAL)
 
-REFERENCEDIR = "reference_data"
 
 rule all:
 	input:
-		"{REFERENCEDIR}/gc10kb.bed"
+		"reference_dir/gc10kb.bed"
 
 rule refData_hg19Lengths:
 	output:
-		"{REFERENCEDIR}/hg19.genome"
+		"reference_dir/hg19.genome"
 	shell:
 		"curl -s https://genome.ucsc.edu/goldenpath/help/hg19.chrom.sizes > {output}"
 
 rule refData_1000GStrictMask:
 	input:
-		"{REFERENCEDIR}/hg19.genome"
+		"reference_dir/hg19.genome"
 	output:
-		"{REFERENCEDIR}/testmask2.bed"
+		"reference_dir/testmask2.bed"
 	shell:
 		"curl -s  ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/accessible_genome_masks/20140520.strict_mask.autosomes.bed | "
 		"bedtools complement -i - -g {input} | bedtools sort | awk 'match($1, /chr[0-9]+$/) {{print $0}}' > {output}"
 
 rule refData_refGenome:
 	output:
-		"{REFERENCEDIR}/human_g1k_v37/human_g1k_v37.fasta"
+		"reference_dir/human_g1k_v37/human_g1k_v37.fasta"
 	shell:
 		"""
 		set +e
@@ -49,10 +48,10 @@ rule refData_refGenome:
 		"""
 rule refData_mask_v37:
 	input:
-		fasta = "{REFERENCEDIR}/human_g1k_v37/human_g1k_v37.fasta",
-		bed = "{REFERENCEDIR}/testmask2.bed"
+		fasta = "reference_dir/human_g1k_v37/human_g1k_v37.fasta",
+		bed = "reference_dir/testmask2.bed"
 	output:
-		"{REFERENCEDIR}/human_g1k_v37_mask/human_g1k_v37.premask.fasta"
+		"reference_dir/human_g1k_v37_mask/human_g1k_v37.premask.fasta"
 	shell:
 		"bedtools maskfasta -fi {input.fasta} -bed {input.bed} -fo {output}"
 
@@ -70,18 +69,18 @@ rule refData_decompressAncestral:
 	output:
 		directory(join(REFERENCEDIR, ANCESTRALBASE.replace(".tar.bz2", "")))
 	shell:
-		"tar -xjf {input} -C {REFERENCEDIR}"
+		"tar -xjf {input} -C reference_dir"
 
 
 rule refData_fixedWidthWindows:
 	input:
-		"{REFERENCEDIR}/hg19.genome"
+		"reference_dir/hg19.genome"
 	output:
-		win1000 = "{REFERENCEDIR}/genome.1000kb.sorted.bed",
-		win5000 = "{REFERENCEDIR}/genome.5000kb.sorted.bed",
-		win100 = "{REFERENCEDIR}/genome.100kb.sorted.bed",
-		win10 = "{REFERENCEDIR}/genome.10kb.sorted.bed",
-		winFull = "{REFERENCEDIR}/genome.full.sorted.bed"
+		win1000 = "reference_dir/genome.1000kb.sorted.bed",
+		win5000 = "reference_dir/genome.5000kb.sorted.bed",
+		win100 = "reference_dir/genome.100kb.sorted.bed",
+		win10 = "reference_dir/genome.10kb.sorted.bed",
+		winFull = "reference_dir/genome.full.sorted.bed"
 	shell:
 		"""
 		bedtools makewindows -g {input} -w 1000000 | grep -Ev \"_|X|Y|M\" | sort -k 1,1 -k2,2n > {output.win1000}
@@ -93,21 +92,21 @@ rule refData_fixedWidthWindows:
 
 rule refData_gcContent:
 	input:
-		fasta = "{REFERENCEDIR}/human_g1k_v37/human_g1k_v37.fasta",
-		bed = "{REFERENCEDIR}/genome.10kb.sorted.bed"
+		fasta = "reference_dir/human_g1k_v37/human_g1k_v37.fasta",
+		bed = "reference_dir/genome.10kb.sorted.bed"
 	output:
-		"{REFERENCEDIR}/gc10kb.bed"
+		"reference_dir/gc10kb.bed"
 	shell:
 		"sed s/chr// {input.bed} | bedtools nuc -fi {input.fasta} -bed - > {output}"
 
 rule refData_cpgIslands:
 	output:
-		"{REFERENCEDIR}/cpg_islands_sorted.bed"
+		"reference_dir/cpg_islands_sorted.bed"
 	shell:
 		"curl -s  http://web.stanford.edu/class/bios221/data/model-based-cpg-islands-hg19.txt | awk \'NR>1\' | sort -k1,1 -k2,2n > {output}"
 
 rule refData_lamin:
 	output:
-		"{REFERENCEDIR}/lamin_B1_LADS2.bed"
+		"reference_dir/lamin_B1_LADS2.bed"
 	shell:
 		"curl -s  \"http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/laminB1Lads.txt.gz\" | gunzip | awk \'NR>1 {print $2\"\t\"$3\"\t\"$4}\' | bedtools sort -i - > lamin_B1_LADS2.bed"
