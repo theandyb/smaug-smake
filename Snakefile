@@ -101,3 +101,9 @@ rule refData_cpgIslands:
 		"{REFERENCEDIR}/cpg_islands_sorted.bed"
 	shell:
 		"curl -s  http://web.stanford.edu/class/bios221/data/model-based-cpg-islands-hg19.txt | awk \'NR>1\' | sort -k1,1 -k2,2n > {output}"
+
+rule refData_lamin:
+	output:
+		"{REFERENCEDIR}/lamin_B1_LADS2.bed"
+	shell:
+		"curl -s  \"http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/laminB1Lads.txt.gz\" | gunzip | awk \'NR>1 {print $2\"\t\"$3\"\t\"$4}\' | bedtools sort -i - > lamin_B1_LADS2.bed"
