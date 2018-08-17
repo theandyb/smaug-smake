@@ -227,8 +227,8 @@ rule refData_overChain:
 rule refData_2xHARUnlifted:
 	input:
 		liftOver="reference_data/liftOver",
-		har="reference_data/22xHARs.bed",
-		chain="reference_data/hg18hg18ToHg19.over.chain.gz"
+		har="reference_data/2xHARs.bed",
+		chain="reference_data/hg18ToHg19.over.chain.gz"
 	output:
 		har="reference_data/2xHARs.hg19.bed",
 		bed="reference_data/unlifted.bed"
