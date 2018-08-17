@@ -182,3 +182,20 @@ rule refData_refSeqExons:
 		"reference_data/GRCh37_RefSeq_sorted.bed"
 	run:
 		shell("mv {input} {output}")
+
+rule refData_cytobands:
+	input:
+		HTTP.remote("http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/cytoBand.txt.gz", keep_local=True)
+	output:
+		cyto="reference_data/cytoBand.txt",
+	run:
+		shell("gunzip {input} > {output}")
+
+rule refData_maskPctPerBand:
+	input:
+		cyto="reference_data/cytoBand.txt",
+		bed="reference_data/testmask2.bed"
+	output:
+		"reference_data/testcov.bed"
+	shell:
+		"bedtools coverage -a {input.bed} -b {input.cyto} > {output}"
