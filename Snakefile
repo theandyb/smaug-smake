@@ -134,3 +134,26 @@ rule refData_recomb:
 		echo \"CHR\\tSTART\\tEND\\tRATE\" > {output}
 		awk \'NR>1\' \"reference_data/SexAveraged.wig\" | cat >> {output}
 		"""
+
+rule refData_getHistone:
+	output:
+		"reference_data/sort.E062-H3K27ac.bed",
+		"reference_data/sort.E062-H3K27me3.bed",
+		"reference_data/sort.E062-H3K36me3.bed",
+		"reference_data/sort.E062-H3K4me1.bed",
+		"reference_data/sort.E062-H3K4me3.bed",
+		"reference_data/sort.E062-H3K9ac.bed",
+		"reference_data/sort.E062-H3K9me3.bed"
+	shell:
+		"""
+		wget -r -nd -P . --accept-regex \'E062\' https://egg2.wustl.edu/roadmap/data/byFileType/peaks/consolidated/broadPeak/
+
+		gunzip *.broadPeak.gz
+		for f in *.broadPeak; do
+			mv -- \"$f\" \"${f%.broadPeak}.bed\"
+		done
+
+		for i in E062*.bed; do
+			bedtools sort -i $i > sort.$i
+		done
+		"""
