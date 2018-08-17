@@ -164,5 +164,3 @@ rule refData_deNovo_goNL:
 		HTTP.remote("https://molgenis26.target.rug.nl/downloads/gonl_public/variants/release5.2/GoNL_DNMs.txt", keep_local=True)
 	output:
 		"DNMS/GoNL_DNMs.txt"
-	run:
-        shell("mv {input} {output}")
