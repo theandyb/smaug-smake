@@ -233,4 +233,5 @@ rule refData_2xHARUnlifted:
 		har="reference_data/2xHARs.hg19.bed",
 		bed="reference_data/unlifted.bed"
 	run:
-		shell("{input.liftOver}" "{input.har}" "{input.chain}" "{output.har} {output.bed}")
+		shell("\"{input.liftOver}\" \"{input.har}\" \"{input.chain}\" \"{output.har}\" \"{output.bed}\"")
+""
