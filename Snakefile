@@ -243,3 +243,11 @@ rule refData_HARSort:
 		"reference_data/2xHARs.hg19.sort.bed"
 	run:
 		shell("bedtools sort -i {input} > {output}")
+
+rule refData_AggarwalaVoight:
+	input:
+		HTTP.remote("https://media.nature.com/original/nature-assets/ng/journal/v48/n4/extref/ng.3511-S2.xlsx", keep_local=True)
+	output:
+		"reference_data/AV_rates.xlsx"
+	run:
+		shell("mv {input} {output}")
