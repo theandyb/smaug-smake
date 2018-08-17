@@ -177,7 +177,7 @@ rule refData_deNovo_goldmann:
 
 rule refData_refSeqExons:
 	input:
-		HTTP.remote(""http://mutation.sph.umich.edu/hg19/GRCh37_RefSeq_sorted.bed", keep_local=True)
+		HTTP.remote("http://mutation.sph.umich.edu/hg19/GRCh37_RefSeq_sorted.bed", keep_local=True)
 	output:
 		"reference_data/GRCh37_RefSeq_sorted.bed"
 	run:
