@@ -150,10 +150,10 @@ rule refData_getHistone:
 
 		gunzip *.broadPeak.gz
 		for f in *.broadPeak; do
-			mv -- \"$f\" \"${{f%.broadPeak}}.bed\"
+			mv -- \"$f\" \"reference_data/${{f%.broadPeak}}.bed\"
 		done
 
-		for i in E062*.bed; do
-			bedtools sort -i $i > sort.$i
+		for i in reference_data/E062*.bed; do
+			bedtools sort -i $i > reference_data/sort.$i
 		done
 		"""
