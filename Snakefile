@@ -167,7 +167,7 @@ rule refData_deNovo_goNL:
 	run:
 		shell("mv {input} {output}")
 
-rule refData_deNovo_goNL:
+rule refData_deNovo_goldman:
 	input:
 		HTTP.remote("https://media.nature.com/original/nature-assets/ng/journal/v48/n8/extref/ng.3597-S3.xlsx", keep_local=True)
 	output:
