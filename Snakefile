@@ -167,10 +167,18 @@ rule refData_deNovo_goNL:
 	run:
 		shell("mv {input} {output}")
 
-rule refData_deNovo_goldman:
+rule refData_deNovo_goldmann:
 	input:
 		HTTP.remote("https://media.nature.com/original/nature-assets/ng/journal/v48/n8/extref/ng.3597-S3.xlsx", keep_local=True)
 	output:
 		"DNMs/goldmann_2016_dnms.xlsx"
+	run:
+		shell("mv {input} {output}")
+
+rule refData_refSeqExons:
+	input:
+		HTTP.remote(""http://mutation.sph.umich.edu/hg19/GRCh37_RefSeq_sorted.bed", keep_local=True)
+	output:
+		"reference_data/GRCh37_RefSeq_sorted.bed"
 	run:
 		shell("mv {input} {output}")
