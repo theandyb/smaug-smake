@@ -150,7 +150,7 @@ rule refData_getHistone:
 
 		gunzip *.broadPeak.gz
 		for f in *.broadPeak; do
-			mv -- \"$f\" \"${f%.broadPeak}.bed\"
+			mv -- \"$f\" \"${{f%.broadPeak}}.bed\"
 		done
 
 		for i in E062*.bed; do
