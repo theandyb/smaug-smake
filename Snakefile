@@ -158,3 +158,11 @@ rule refData_getHistone:
 			bedtools sort -i $i > \"reference_data/sort.$outFile\"
 		done
 		"""
+
+rule refData_deNovo_goNL:
+	input:
+		HTTP.remote("https://molgenis26.target.rug.nl/downloads/gonl_public/variants/release5.2/GoNL_DNMs.txt", keep_local=True)
+	output:
+		"DNMS/GoNL_DNMs.txt"
+	run:
+        shell("mv {input} {output}")
