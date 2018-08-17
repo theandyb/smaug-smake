@@ -215,6 +215,7 @@ rule refData_liftover:
 		"reference_data/liftOver"
 	run:
 		shell("mv {input} {output}")
+		shell("chmod +x {output}")
 
 rule refData_overChain:
 	input:
@@ -234,4 +235,11 @@ rule refData_2xHARUnlifted:
 		bed="reference_data/unlifted.bed"
 	run:
 		shell("\"{input.liftOver}\" \"{input.har}\" \"{input.chain}\" \"{output.har}\" \"{output.bed}\"")
-""
+
+rule refData_HARSort:
+	input:
+		"reference_data/2xHARs.hg19.bed"
+	output:
+		"reference_data/2xHARs.hg19.sort.bed"
+	run:
+		shell("bedtools sort -i {input} > {output}")
