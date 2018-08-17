@@ -187,9 +187,9 @@ rule refData_cytobands:
 	input:
 		HTTP.remote("http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/cytoBand.txt.gz", keep_local=True)
 	output:
-		cyto="reference_data/cytoBand.txt",
+		cyto="reference_data/cytoBand.txt"
 	run:
-		shell("gunzip {input} > {output}")
+		shell("gunzip -c {input} > {output}")
 
 rule refData_maskPctPerBand:
 	input:
