@@ -163,6 +163,14 @@ rule refData_deNovo_goNL:
 	input:
 		HTTP.remote("https://molgenis26.target.rug.nl/downloads/gonl_public/variants/release5.2/GoNL_DNMs.txt", keep_local=True)
 	output:
-		"DNMS/GoNL_DNMs.txt"
+		"DNMs/GoNL_DNMs.txt"
+	run:
+		shell("mv {input} {output}")
+
+rule refData_deNovo_goNL:
+	input:
+		HTTP.remote("https://media.nature.com/original/nature-assets/ng/journal/v48/n8/extref/ng.3597-S3.xlsx", keep_local=True)
+	output:
+		"DNMs/goldmann_2016_dnms.xlsx"
 	run:
 		shell("mv {input} {output}")
