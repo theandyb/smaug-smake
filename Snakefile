@@ -154,6 +154,7 @@ rule refData_getHistone:
 		done
 
 		for i in reference_data/E062*.bed; do
-			bedtools sort -i $i > reference_data/sort.$i
+			outFile = $(echo $i | sed -E  's/(.*)\/(.*)/\1/')
+			bedtools sort -i $i > reference_data/sort.$outFile
 		done
 		"""
