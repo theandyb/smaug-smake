@@ -199,3 +199,38 @@ rule refData_maskPctPerBand:
 		"reference_data/testcov.bed"
 	shell:
 		"bedtools coverage -a {input.bed} -b {input.cyto} > {output}"
+
+rule refData_2xHAR:
+	input:
+		FTP.remote("ftp://ftp.broadinstitute.org/pub/assemblies/mammals/29mammals/2xHARs.bed", keep_local=True)
+	output:
+		"reference_data/2xHARs.bed"
+	run:
+		shell("mv {input} {output}")
+
+rule refData_liftover:
+	input:
+		HTTP.remote("http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/liftOver", keep_local=True)
+	output:
+		"reference_data/liftOver"
+	run:
+		shell("mv {input} {output}")
+
+rule refData_overChain:
+	input:
+		HTTP.remote("http://hgdownload.cse.ucsc.edu/goldenPath/hg18/liftOver/hg18ToHg19.over.chain.gz", keep_local=True)
+	output:
+		"reference_data/hg18ToHg19.over.chain.gz"
+	run:
+		shell("mv {input} {output}")
+
+rule refData_2xHARUnlifted:
+	input:
+		liftOver="reference_data/liftOver",
+		har="reference_data/22xHARs.bed",
+		chain="reference_data/hg18hg18ToHg19.over.chain.gz"
+	output:
+		har="reference_data/2xHARs.hg19.bed",
+		bed="reference_data/unlifted.bed"
+	run:
+		shell("{input.liftOver}" "{input.har}" "{input.chain}" "{output.har} {output.bed}")
