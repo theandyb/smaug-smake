@@ -288,11 +288,10 @@ rule refData_compIndexAnc:
 	output:
 		"reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chr}.fa.gz"
 	threads: 1
-	shell:
-		"""
-		cat {input} | sed \"s,^>.*,>$i,\" | bgzip -c > {output}
-		samtools faidx {output}
-		"""
+	run:
+		shell("cat {input} | sed \"s,^>.*,>$i,\" | bgzip -c > {output}")
+		shell("samtools faidx {output}")
+
 rule refData_compAllAnc:
 	input:
 		expand("reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chr}.fa.gz", chr=CHROMOSOMES)
