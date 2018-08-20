@@ -50,7 +50,7 @@ my $bw=$binw/1000;
 ##############################################################################
 # my $in_path = "/net/bipolar/jedidiah/testpipe/summaries";
 my $out_path = "$analysisdir/motif_counts/$subseq-mers/$data";
-make_path("$out_path");
+#make_path("$out_path");
 
 ##############################################################################
 # Counts possible mutable sites per bin for 6 main categories
