@@ -4,6 +4,8 @@ from snakemake.remote.FTP import RemoteProvider as FTPRemoteProvider
 FTP = FTPRemoteProvider()
 HTTP = HTTPRemoteProvider()
 
+# shell.prefix('PATH=/net/snowwhite/home/beckandy/miniconda3/bin:$PATH')
+
 CHROMOSOMES = list(range(1,23))
 ALL_SOMES = CHROMOSOMES[:]
 ALL_SOMES.extend(["X","Y"])
@@ -254,9 +256,9 @@ rule refData_AggarwalaVoight:
 
 rule refData_compIndexRef:
 	input:
-		"reference_data/human_g1k_v37/human_g1k_v37.fasta"
+		"reference_data/{genome}/human_g1k_v37.fasta"
 	output:
-		"reference_data/human_g1k_v37/chr{chr}.fasta.gz"
+		"reference_data/{genome}/chr{chr}.fasta.gz"
 	threads: 1
 	shell:
 		"""
@@ -264,14 +266,18 @@ rule refData_compIndexRef:
 		samtools faidx {output}
 		"""
 
-rule refData_sepChroms:
+rule refData_compAllChroms:
 	input:
 		expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES)
 
-rule refDat_compressIndexMasked:
+rule refDat_cleanMask:
 	input: "reference_data/human_g1k_v37_mask/human_g1k_v37.premask.fasta"
 	output: "reference_data/human_g1k_v37_mask/human_g1k_v37.mask.fasta"
 	shell:
 		"""
 		perl -ane 'if(/\>/){{$a++;print \">$a dna:chromosome\n\"}}else{{print;}}' {input} > {output}
 		"""
+
+rule refData_compAllChromsMask:
+	input:
+		expand("reference_data/human_g1k_v37_mask/chr{chr}.fasta.gz", chr=CHROMOSOMES)
