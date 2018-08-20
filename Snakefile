@@ -281,3 +281,14 @@ rule refDat_cleanMask:
 rule refData_compAllChromsMask:
 	input:
 		expand("reference_data/human_g1k_v37_mask/chr{chr}.fasta.gz", chr=CHROMOSOMES)
+
+rule refData_compIndexAnc:
+	input:
+		"reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chr}.fa"
+	output:
+		"reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chr}.fa.gz"
+	threads: 1
+	shell:
+		"""
+		cat {input} | sed sed \"s,^>.*,>$i,\" | bgzip -c > {output}
+		samtools faidx {output}
