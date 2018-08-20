@@ -251,3 +251,15 @@ rule refData_AggarwalaVoight:
 		"reference_data/AV_rates.xlsx"
 	run:
 		shell("mv {input} {output}")
+
+rule refData_compIndexRef:
+	input:
+		"reference_data/human_g1k_v37/human_g1k_v37.fasta"
+	output:
+		expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES)
+	params:
+		chr=lambda wildcards, output: output[0]
+	shell:
+		"""
+		samtools faidx {input} {params.chr}
+		"""
