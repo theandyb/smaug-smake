@@ -36,3 +36,4 @@ dependencies:
   - perl-math-round
   - ftputil
   - ucsc-bigwigtowig
+  - perl-vcftools-vcf
