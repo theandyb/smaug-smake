@@ -269,8 +269,8 @@ rule refData_sepChroms:
 		expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES)
 
 rule refDat_compressIndexMasked:
-	input: "human_g1k_v37_mask/human_g1k_v37.premask.fasta"
-	output: "human_g1k_v37_mask/human_g1k_v37.mask.fasta"
+	input: "reference_data/human_g1k_v37_mask/human_g1k_v37.premask.fasta"
+	output: "reference_data/human_g1k_v37_mask/human_g1k_v37.mask.fasta"
 	shell:
 		"""
 		perl -ane 'if(/\>/){{$a++;print \">$a dna:chromosome\n\"}}else{{print;}}' {input} > {output}
