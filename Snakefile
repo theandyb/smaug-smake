@@ -10,14 +10,26 @@ CHROMOSOMES = list(range(1,23))
 ALL_SOMES = CHROMOSOMES[:]
 ALL_SOMES.extend(["X","Y"])
 
+ADJ = list(range(1,5))
+
 ANCESTRAL = "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/supporting/ancestral_alignments/human_ancestor_GRCh37_e59.tar.bz2"
 ANCESTRALBASE = basename(ANCESTRAL)
 
 REFERENCEDIR = "reference_data"
 
+configfile: "snakeconfig.yaml"
+
 rule all:
 	input:
 		"reference_data/gc10kb.bed"
+
+rule countMotifs:
+	input:
+		expand("reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chr}.fa.gz", chr=CHROMOSOMES),
+		expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES)
+	output:
+		rare="vcfs/{config.basename}"
+
 
 rule refData_hg19Lengths:
 	output:
@@ -266,10 +278,6 @@ rule refData_compIndexRef:
 		samtools faidx {output}
 		"""
 
-rule refData_compAllChroms:
-	input:
-		expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES)
-
 rule refDat_cleanMask:
 	input: "reference_data/human_g1k_v37_mask/human_g1k_v37.premask.fasta"
 	output: "reference_data/human_g1k_v37_mask/human_g1k_v37_mask.fasta"
@@ -294,6 +302,3 @@ rule refData_compIndexAnc:
 		cat {input} | sed \"s,^>.*,>{wildcards.chr},\" | bgzip -c > {output}
 		samtools faidx {output}
 		"""
-rule refData_compAllAnc:
-	input:
-		expand("reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chr}.fa.gz", chr=CHROMOSOMES)

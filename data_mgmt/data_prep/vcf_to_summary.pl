@@ -35,71 +35,68 @@ use SmaugFunctions qw(forkExecWait getRef);
 my $outdir="$analysisdir/summaries";
 make_path($outdir);
 
-# Running script with argument 'copy'
-# copies VCFs from another directory to avoid overwriting raw data
-my $makecopy='';
-if(defined($ARGV[0])){
-  $makecopy = $ARGV[0];
-}
+my $ancestral = $ARGV[0];
+my $newrare = $ARGV[1];
+my $newcommon = $ARGV[2];
 
 # Specify project folder for VCFs
 my $vcfdir="$analysisdir/vcfs";
-make_path($vcfdir);
 
 ################################################################################
 # Reads raw vcfs from original location, annotates with necessary info,
 # and copies to input directory. Original vcfs are preserved and not modified.
 ################################################################################
-if ($makecopy eq "copy") {
-	for my $mac (@macs){
-		my @rawvcfs = File::Find::Rule->file()
-	                            ->name("*.$rawvcfext")
-	                            ->maxdepth(3)
-	                            ->in($rawvcfdir);
+for my $mac (@macs){
+	my @rawvcfs = File::Find::Rule->file()
+                            ->name("*.$rawvcfext")
+                            ->maxdepth(3)
+                            ->in($rawvcfdir);
 
-		foreach my $rawvcf (@rawvcfs) {
-			my $filename=fileparse($rawvcf);
+	foreach my $rawvcf (@rawvcfs) {
+		my $filename=fileparse($rawvcf);
 
-	    if($filename !~ /chrX/){
-	      my @parts = split(/\.vcf.gz/, $filename);
-	      my $basename = $parts[0];
-	      my @nameparts = split(/\./, $basename);
-	      my $i = $nameparts[0];
-	      $i =~ s/chr//g;
+    if($filename !~ /chrX/){
+      my @parts = split(/\.vcf.gz/, $filename);
+      my $basename = $parts[0];
+      my @nameparts = split(/\./, $basename);
+      my $i = $nameparts[0];
+      $i =~ s/chr//g;
 
-	      my $newvcf = "$analysisdir/vcfs/$basename.ma.aa.$mac.vcf.gz";
-	      my $ancestral = "$analysisdir/reference_data/human_ancestor_GRCh37_e59/human_ancestor_$i.fa.gz";
-	      my $fasta = "$analysisdir/reference_data/human_g1k_v37/chr$i.fasta.gz";
+      my $newvcf = $newrare;
+      if($mac eq 'common'){
+        $newvcf = $newcommon;
+      }
+      my $fasta = "$analysisdir/reference_data/human_g1k_v37/chr$i.fasta.gz";
 
-	      # first command extracts singletons with filter PASS, including any that
-	      # occur in multiallelic sites
-	      my $maparse = "perl $relpath/ma_parse.pl --i $rawvcf";
+      # first command extracts singletons with filter PASS, including any that
+      # occur in multiallelic sites
+      my $maparse = "perl $relpath/ma_parse.pl --i $rawvcf";
 
-	      # second command fills ancestral allele to AA field
-	      my $aaparse = "perl $vcftoolsdir/perl/fill-aa -a $ancestral";
+      # second command fills ancestral allele to AA field
+      my $aaparse = "fill-aa -a $ancestral";
 
-	      # last command adds Motif and Category info fields
-	      my $infoparse = "perl $relpath/fill_motif.pl -a $fasta";
+      # last command adds Motif and Category info fields
+      my $infoparse = "perl $relpath/fill_motif.pl -a $fasta";
 
-	      # pipe commands and execute
-	      my $pipe;
-	      if($mac eq "singletons"){
-	        $pipe = "$maparse | $aaparse | $infoparse | bgzip -c > $newvcf";
-	      } elsif($mac eq "common"){
-	        my $filter = "bcftools view -i 'AC>=10' -f PASS";
-	        $pipe = "$filter $rawvcf | $infoparse | bgzip -c > $newvcf";
-	      }
+      # pipe commands and execute
+      my $pipe;
+      if($mac eq "singletons"){
+        $pipe = "$maparse | $aaparse | $infoparse | bgzip -c > $newvcf";
+      } elsif($mac eq "common"){
+        my $filter = "bcftools view -i 'AC>=10' -f PASS";
+        $pipe = "$filter $rawvcf | $infoparse | bgzip -c > $newvcf";
+      }
 
-	      print STDERR "Input file: $rawvcf\n";
-	      print STDERR "Writing to: $newvcf...\n";
-	      forkExecWait($pipe);
-	      print STDERR "Done\n";
-	    }
-		}
-
-	  print STDERR "Operation complete\n";
+      print STDERR "Input file: $rawvcf\n";
+      print STDERR "Writing to: $newvcf...\n";
+      forkExecWait($pipe);
+      print STDERR "Done\n";
+    }
 	}
+
+  print STDERR "Operation complete\n";
 }
+
 
 ################################################################################
 # Scans input directory for vcfs and outputs summary file to get per-chromosome
