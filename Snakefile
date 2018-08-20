@@ -291,7 +291,7 @@ rule refData_compIndexAnc:
 	shell:
 		"""
 		set +e
-		cat {input} | sed \"s,^>.*,>$i,\" | bgzip -c > {output}
+		cat {input} | sed \"s,^>.*,>{wildcards.chr},\" | bgzip -c > {output}
 		samtools faidx {output}
 		"""
 rule refData_compAllAnc:
