@@ -293,3 +293,6 @@ rule refData_compIndexAnc:
 		cat {input} | sed sed \"s,^>.*,>$i,\" | bgzip -c > {output}
 		samtools faidx {output}
 		"""
+rule refData_compAllAnc:
+	input:
+		expand("reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chr}.fa.gz", chr=CHROMOSOMES)
