@@ -8,6 +8,14 @@ email: "beckandy@umich.edu"
 ## inputdir defines the directory containing the prepared VCF and .summary files
 inputdir: "/net/bipolar/jedidiah/testpipe"
 
+analysisdir: "/net/snowwhite/home/beckandy/research/smaug-redux"
+
+##############################################################################
+# set flags for which files to output when running augment_summary.pl script
+##############################################################################
+count_motifs: TRUE
+expand_summ: TRUE
+
 # binw defines the width of fixed bins in base pairs
 binw: 1000000
 

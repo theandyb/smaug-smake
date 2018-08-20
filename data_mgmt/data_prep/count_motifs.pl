@@ -24,7 +24,6 @@ my $relpath = $FindBin::Bin;
 my $configpath = dirname(dirname($relpath));
 my $config = LoadFile("$configpath/_config.yaml");
 my $binw = $config->{binw};
-my $data = $config->{data};
 my $analysisdir = $config->{analysisdir};
 my $count_motifs = $config->{count_motifs};
 my $expand_summ = $config->{expand_summ};
@@ -34,6 +33,7 @@ use SmaugFunctions qw(forkExecWait getRef getMotif);
 
 my $chr=$ARGV[0];
 my $adj=$ARGV[1];
+my $data = $ARGV[2];
 
 ##############################################################################
 #Process inputs
@@ -66,7 +66,7 @@ if($count_motifs eq "TRUE"){
   } elsif($data eq "mask"){
     $fname = "$analysisdir/reference_data/human_g1k_v37_mask/chr$chr.fasta.gz";
   }
-	
+
   my $fa;
 
   my $startpos;
