@@ -290,7 +290,7 @@ rule refData_compIndexAnc:
 	threads: 1
 	shell:
 		"""
-		cat {input} | sed sed \"s,^>.*,>$i,\" | bgzip -c > {output}
+		cat {input} | sed \"s,^>.*,>$i,\" | bgzip -c > {output}
 		samtools faidx {output}
 		"""
 rule refData_compAllAnc:
