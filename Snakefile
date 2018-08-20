@@ -257,6 +257,7 @@ rule refData_compIndexRef:
 		"reference_data/human_g1k_v37/human_g1k_v37.fasta"
 	output:
 		"reference_data/human_g1k_v37/chr{chr}.fasta.gz"
+	threads: 8
 	shell:
 		"""
 		samtools faidx {input} {wildcards.chr} | bgzip -c > {output}
