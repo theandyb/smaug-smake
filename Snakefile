@@ -292,3 +292,4 @@ rule refData_compIndexAnc:
 		"""
 		cat {input} | sed sed \"s,^>.*,>$i,\" | bgzip -c > {output}
 		samtools faidx {output}
+		"""
