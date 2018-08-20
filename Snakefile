@@ -272,7 +272,7 @@ rule refData_compAllChroms:
 
 rule refDat_cleanMask:
 	input: "reference_data/human_g1k_v37_mask/human_g1k_v37.premask.fasta"
-	output: "reference_data/human_g1k_v37_mask/human_g1k_v37.mask.fasta"
+	output: "reference_data/human_g1k_v37_mask/human_g1k_v37_mask.fasta"
 	shell:
 		"""
 		perl -ane 'if(/\>/){{$a++;print \">$a dna:chromosome\n\"}}else{{print;}}' {input} > {output}
