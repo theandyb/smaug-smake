@@ -256,10 +256,12 @@ rule refData_compIndexRef:
 	input:
 		"reference_data/human_g1k_v37/human_g1k_v37.fasta"
 	output:
-		expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES)
-	params:
-		chr=lambda wildcards, output: output[0]
+		"reference_data/human_g1k_v37/chr{chr}.fasta.gz"
 	shell:
 		"""
-		samtools faidx {input} {params.chr}
+		samtools faidx {input} {wildcards.chr} | bgzip -c > {output}
+		samtools faidx {output}
 		"""
+rule refData_sepChroms
+	input:
+		expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES)
