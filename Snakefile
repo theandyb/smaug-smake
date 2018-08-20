@@ -52,7 +52,7 @@ rule refData_mask_v37:
 		fasta = "reference_data/human_g1k_v37/human_g1k_v37.fasta",
 		bed = "reference_data/testmask2.bed"
 	output:
-		"reference_data/human_g1k_v37_mask/human_g1k_v37.premask.fasta"
+		temp("reference_data/human_g1k_v37_mask/human_g1k_v37.premask.fasta")
 	shell:
 		"bedtools maskfasta -fi {input.fasta} -bed {input.bed} -fo {output}"
 
@@ -263,6 +263,15 @@ rule refData_compIndexRef:
 		samtools faidx {input} {wildcards.chr} | bgzip -c > {output}
 		samtools faidx {output}
 		"""
+
 rule refData_sepChroms:
 	input:
 		expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES)
+
+rule refDat_compressIndexMasked:
+	input: "human_g1k_v37_mask/human_g1k_v37.premask.fasta"
+	output: "human_g1k_v37_mask/human_g1k_v37.mask.fasta"
+	shell:
+		"""
+		perl -ane 'if(/\>/){{$a++;print \">$a dna:chromosome\n\"}}else{{print;}}' {input} > {output}
+		"""
