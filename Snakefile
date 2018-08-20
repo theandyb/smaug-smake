@@ -256,7 +256,7 @@ rule refData_AggarwalaVoight:
 
 rule refData_compIndexRef:
 	input:
-		"reference_data/{genome}/human_g1k_v37.fasta"
+		"reference_data/{genome}/{genome}.fasta"
 	output:
 		"reference_data/{genome}/chr{chr}.fasta.gz"
 	threads: 1
