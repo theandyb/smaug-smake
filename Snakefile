@@ -262,6 +262,6 @@ rule refData_compIndexRef:
 		samtools faidx {input} {wildcards.chr} | bgzip -c > {output}
 		samtools faidx {output}
 		"""
-rule refData_sepChroms
+rule refData_sepChroms:
 	input:
 		expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES)
