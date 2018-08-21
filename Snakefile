@@ -19,19 +19,14 @@ REFERENCEDIR = "reference_data"
 
 configfile: "config.yaml"
 
-rule all_vcf:
-	input:
-		expand("vcfs/chr{chr}.ma.aa.common.vcf.gz", chr=CHROMOSOMES),
-		expand("vcfs/chr{chr}.ma.aa.singletons.vcf.gz", chr=CHROMOSOMES)
-
 rule vcfSummary:
 	input:
-		anc="reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chr}.fa.gz",
-		fasta="reference_data/human_g1k_v37/chr{chr}.fasta.gz",
-		vcf=expand("{dir}/chr{{chr}}/chr{{chr}}.{ext}", dir=config["rawvcfdir"], ext=config["rawvcfext"])
+		anc=expand("reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chr}.fa.gz", chr=CHROMOSOMES),
+		fasta=expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES),
+		vcf=expand("{dir}/chr{{chr}}/chr{{chr}}.{ext}", dir=config["rawvcfdir"], ext=config["rawvcfext"], chr=CHROMOSOMES)
 	output:
-		rare="vcfs/chr{chr}.ma.aa.singletons.vcf.gz",
-		common="vcfs/chr{chr}.ma.aa.common.vcf.gz",
+		rare=expand("vcfs/chr{chr}.ma.aa.common.vcf.gz", chr=CHROMOSOMES),
+		common=expand("vcfs/chr{chr}.ma.aa.common.vcf.gz", chr=CHROMOSOMES),
 		"summaries/common.full.summary",
 		"summaries/singletons.full.summary"
 	shell:
