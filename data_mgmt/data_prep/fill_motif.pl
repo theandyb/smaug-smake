@@ -16,13 +16,10 @@ my $configpath = dirname(dirname($relpath));
 my $config = LoadFile("$configpath/config.yaml");
 
 my $adj = $config->{adj};
-my $mac = $config->{mac};
 my $binw = $config->{binw};
 my $data = $config->{data};
 my $bin_scheme = $config->{bin_scheme};
 my $analysisdir = $config->{analysisdir};
-my $count_motifs = $config->{count_motifs};
-my $expand_summ = $config->{expand_summ};
 
 use lib "$FindBin::Bin/../lib";
 use SmaugFunctions qw(getMotif getType);

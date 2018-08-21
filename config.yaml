@@ -16,8 +16,19 @@ analysisdir: "/net/snowwhite/home/beckandy/research/smaug-smake"
 count_motifs: TRUE
 expand_summ: TRUE
 
+# bin_scheme variable defines how motifs are counted.
+# Must be set to one of 3 options:
+# "all" (count across entire chromosome)
+# "fixed" (fixed-width windows of size binw)
+# "band" (use geimsa-staned banding)
+bin_scheme: "all"
+
+
 # binw defines the width of fixed bins in base pairs
 binw: 1000000
+
+# adj defines number of bases upstream/downstream per motif
+adj: 4
 
 ##############################################################################
 ## Define location and naming convention of raw input vcfs, if we are using the
