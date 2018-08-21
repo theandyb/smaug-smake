@@ -21,8 +21,8 @@ configfile: "config.yaml"
 
 rule all_vcf:
 	input:
-		expand("vcfs/chr{chr}.{vcf}.ma.aa.common.vcf.gz", chr=CHROMOSOMES, vcf=config["rawvcfext"].split(".vcf")[0]),
-		expand("vcfs/chr{chr}.{vcf}.ma.aa.singletons.vcf.gz", chr=CHROMOSOMES, vcf=config["rawvcfext"].split(".vcf")[0])
+		expand("vcfs/chr{chr}.ma.aa.common.vcf.gz", chr=CHROMOSOMES),
+		expand("vcfs/chr{chr}.ma.aa.singletons.vcf.gz", chr=CHROMOSOMES)
 
 rule vcfSummary:
 	input:
