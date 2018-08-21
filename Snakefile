@@ -20,7 +20,8 @@ REFERENCEDIR = "reference_data"
 configfile: "config.yaml"
 
 def rawVCFs(wildcards):
-	vcf = config["rawvcfdir"] + "/chr" + wildcards.chr + "/chr" + wildcards.chr +config["rawvcfext"]
+	chrom = [int(s) for s in wildcards.chr.split() if s.isdigit()][0]
+	vcf = config["rawvcfdir"] + "/chr" + chrom + "/chr" + chrom + config["rawvcfext"]
 	return [vcf]
 
 rule all_vcf:
