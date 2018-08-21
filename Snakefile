@@ -34,8 +34,8 @@ rule vcfSummary:
 		fasta=expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES),
 		vcf=rawVCFs
 	output:
-		rare="vcfs/chr{chr}.{config[rawvcfext].split(".vcf")[0]}.ma.aa.singletons.vcf.gz",
-		common="vcfs/chr{chr}.{config[rawvcfext].split(".vcf")[0]}.ma.aa.common.vcf.gz"
+		rare="vcfs/chr{chr}.{ext}.ma.aa.singletons.vcf.gz",
+		common="vcfs/chr{chr}.{ext}.ma.aa.common.vcf.gz"
 	shell:
 		"""
 		test {output.rare} {output.common}
