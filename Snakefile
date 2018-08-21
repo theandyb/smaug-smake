@@ -23,7 +23,7 @@ rule vcfSummary:
 	input:
 		anc=expand("reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chr}.fa.gz", chr=CHROMOSOMES),
 		fasta=expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES),
-		vcf=expand("{dir}/chr{{chr}}/chr{{chr}}.{ext}", dir=config["rawvcfdir"], ext=config["rawvcfext"], chr=CHROMOSOMES)
+		vcf=expand("{dir}/chr{chr}/chr{chr}.{ext}", dir=config["rawvcfdir"], ext=config["rawvcfext"], chr=CHROMOSOMES)
 	output:
 		"summaries/common.full.summary",
 		"summaries/singletons.full.summary",
