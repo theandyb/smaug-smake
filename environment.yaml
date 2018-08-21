@@ -7,7 +7,7 @@ channels:
   - andyb262
 dependencies:
   - bcftools
-  - vcftools
+  - vcftools=0.1.16
   - python
   - snakemake
   - pyyaml
@@ -36,4 +36,4 @@ dependencies:
   - perl-math-round
   - ftputil
   - ucsc-bigwigtowig
-  - perl-vcftools-vcf
+  - perl-vcftools-vcf=0.1.16

@@ -17,18 +17,30 @@ ANCESTRALBASE = basename(ANCESTRAL)
 
 REFERENCEDIR = "reference_data"
 
-configfile: "snakeconfig.yaml"
+configfile: "config.yaml"
 
-rule all:
-	input:
-		"reference_data/gc10kb.bed"
+def rawVCFs(wildcards):
+	vcf = config["rawvcfdir"] + "/chr" + wildcards.chr + "/chr" + wildcards.chr +config["rawvcfext"]
+	return [vcf]
 
-rule countMotifs:
+rule all_vcf:
 	input:
-		expand("reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chr}.fa.gz", chr=CHROMOSOMES),
-		expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES)
+		expand("vcfs/chr{chr}.{config["rawvcfext"]}.ma.aa.common.vcf.gz", chr=CHROMOSOMES),
+		expand("vcfs/chr{chr}.{config["rawvcfext"]}.ma.aa.singletons.vcf.gz", chr=CHROMOSOMES)
+
+rule vcfSummary:
+	input:
+		anc=expand("reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chr}.fa.gz", chr=CHROMOSOMES),
+		fasta=expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES),
+		vcf=rawVCFs
 	output:
-		rare="vcfs/{config.basename}"
+		rare="vcfs/chr{chr}.{config["rawvcfext"]}.ma.aa.singletons.vcf.gz",
+		common="vcfs/chr{chr}.{config["rawvcfext"]}.ma.aa.common.vcf.gz"
+	shell:
+		"""
+		test {output.rare} {output.common}
+		test {input.vcf}
+		"""
 
 
 rule refData_hg19Lengths:
