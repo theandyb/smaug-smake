@@ -25,10 +25,10 @@ rule vcfSummary:
 		fasta=expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES),
 		vcf=expand("{dir}/chr{{chr}}/chr{{chr}}.{ext}", dir=config["rawvcfdir"], ext=config["rawvcfext"], chr=CHROMOSOMES)
 	output:
-		rare=expand("vcfs/chr{chr}.ma.aa.common.vcf.gz", chr=CHROMOSOMES),
-		common=expand("vcfs/chr{chr}.ma.aa.common.vcf.gz", chr=CHROMOSOMES),
 		"summaries/common.full.summary",
-		"summaries/singletons.full.summary"
+		"summaries/singletons.full.summary",
+		rare=expand("vcfs/chr{chr}.ma.aa.common.vcf.gz", chr=CHROMOSOMES),
+		common=expand("vcfs/chr{chr}.ma.aa.common.vcf.gz", chr=CHROMOSOMES)
 	shell:
 		"""
 		perl data_mgmt/data_prep/vcf_to_summary.pl \"ma.aa.singletons.vcf.gz\" \"ma.aa.common.vcf.gz\"
