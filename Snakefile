@@ -25,8 +25,8 @@ def rawVCFs(wildcards):
 
 rule all_vcf:
 	input:
-		expand("vcfs/chr{chr}.{vcf}.ma.aa.common.vcf.gz", chr=CHROMOSOMES, vcf=config["rawvcfext"]),
-		expand("vcfs/chr{chr}.{vcf}.ma.aa.singletons.vcf.gz", chr=CHROMOSOMES, vcf=config["rawvcfext"])
+		expand("vcfs/chr{chr}.{vcf}.ma.aa.common.vcf.gz", chr=CHROMOSOMES, vcf=config["rawvcfext"].split(".vcf")[0]),
+		expand("vcfs/chr{chr}.{vcf}.ma.aa.singletons.vcf.gz", chr=CHROMOSOMES, vcf=config["rawvcfext"].split(".vcf")[0])
 
 rule vcfSummary:
 	input:
@@ -34,8 +34,8 @@ rule vcfSummary:
 		fasta=expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES),
 		vcf=rawVCFs
 	output:
-		rare="vcfs/chr{chr}.{config[rawvcfext]}.ma.aa.singletons.vcf.gz",
-		common="vcfs/chr{chr}.{config[rawvcfext]}.ma.aa.common.vcf.gz"
+		rare="vcfs/chr{chr}.{config[rawvcfext].split(".vcf")[0]}.ma.aa.singletons.vcf.gz",
+		common="vcfs/chr{chr}.{config[rawvcfext].split(".vcf")[0]}.ma.aa.common.vcf.gz"
 	shell:
 		"""
 		test {output.rare} {output.common}
