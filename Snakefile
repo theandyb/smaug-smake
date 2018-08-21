@@ -30,8 +30,8 @@ rule vcfSummary:
 		fasta="reference_data/human_g1k_v37/chr{chr}.fasta.gz",
 		vcf=expand("{dir}/chr{{chr}}/chr{{chr}}.{ext}", dir=config["rawvcfdir"], ext=config["rawvcfext"])
 	output:
-		rare="vcfs/chr{chr}.{ext}.ma.aa.singletons.vcf.gz",
-		common="vcfs/chr{chr}.{ext}.ma.aa.common.vcf.gz"
+		rare="vcfs/chr{chr}.ma.aa.singletons.vcf.gz",
+		common="vcfs/chr{chr}.ma.aa.common.vcf.gz"
 	shell:
 		"""
 		test {output.rare} {output.common}
