@@ -26,9 +26,9 @@ rule all_vcf:
 
 rule vcfSummary:
 	input:
-		anc=expand("reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chr}.fa.gz", chr=CHROMOSOMES),
-		fasta=expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES),
-		vcf=expand("{dir}/chr{chr}/chr{chr}.{ext}", chr=CHROMOSOMES, dir=config["rawvcfdir"], ext=config["rawvcfext"])
+		anc="reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chr}.fa.gz",
+		fasta="reference_data/human_g1k_v37/chr{chr}.fasta.gz",
+		vcf=expand("{dir}/chr{chr}/chr{chr}.{ext}", dir=config["rawvcfdir"], ext=config["rawvcfext"])
 	output:
 		rare="vcfs/chr{chr}.{ext}.ma.aa.singletons.vcf.gz",
 		common="vcfs/chr{chr}.{ext}.ma.aa.common.vcf.gz"
