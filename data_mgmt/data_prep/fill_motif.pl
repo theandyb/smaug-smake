@@ -13,7 +13,7 @@ use feature 'say';
 
 my $relpath = $FindBin::Bin;
 my $configpath = dirname(dirname($relpath));
-my $config = LoadFile("$configpath/_config.yaml");
+my $config = LoadFile("$configpath/config.yaml");
 
 my $adj = $config->{adj};
 my $mac = $config->{mac};

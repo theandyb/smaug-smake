@@ -22,7 +22,7 @@ use feature 'say';
 
 my $relpath = $FindBin::Bin;
 my $configpath = dirname(dirname($relpath));
-my $config = LoadFile("$configpath/_config.yaml");
+my $config = LoadFile("$configpath/config.yaml");
 my $binw = $config->{binw};
 my $analysisdir = $config->{analysisdir};
 my $count_motifs = $config->{count_motifs};
