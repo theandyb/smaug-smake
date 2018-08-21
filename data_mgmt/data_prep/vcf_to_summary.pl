@@ -18,7 +18,7 @@ use feature 'say';
 
 my $relpath = $FindBin::Bin; # data_prep location
 my $configpath = dirname(dirname($relpath));
-my $config = LoadFile("$configpath/_config.yaml");
+my $config = LoadFile("$configpath/config.yaml");
 
 my @macs = ("common", "singletons");
 
@@ -35,12 +35,12 @@ use SmaugFunctions qw(forkExecWait getRef);
 my $outdir="$analysisdir/summaries";
 make_path($outdir);
 
-my $ancestral = $ARGV[0];
-my $newrare = $ARGV[1];
-my $newcommon = $ARGV[2];
+my $newrare = $ARGV[0];
+my $newcommon = $ARGV[1];
 
 # Specify project folder for VCFs
 my $vcfdir="$analysisdir/vcfs";
+make_path($vcfdir);
 
 ################################################################################
 # Reads raw vcfs from original location, annotates with necessary info,
@@ -62,11 +62,14 @@ for my $mac (@macs){
       my $i = $nameparts[0];
       $i =~ s/chr//g;
 
-      my $newvcf = $newrare;
+      my $newvcf = "$analysisdir/vcfs/chr$i";
       if($mac eq 'common'){
-        $newvcf = $newcommon;
+        $newvcf = "$newvcf.$newcommon";
+      } else {
+        $newvcf = "$newvcf.$newrare";
       }
       my $fasta = "$analysisdir/reference_data/human_g1k_v37/chr$i.fasta.gz";
+      my $ancestral = "$analysisdir/reference_data/human_ancestor_GRCh37_e59/human_ancestor_$i.fa.gz";
 
       # first command extracts singletons with filter PASS, including any that
       # occur in multiallelic sites

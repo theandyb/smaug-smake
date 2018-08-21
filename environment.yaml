@@ -37,3 +37,4 @@ dependencies:
   - ftputil
   - ucsc-bigwigtowig
   - perl-vcftools-vcf=0.1.16
+  - perl-file-find-rule

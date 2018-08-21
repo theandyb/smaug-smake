@@ -31,11 +31,12 @@ rule vcfSummary:
 		vcf=expand("{dir}/chr{{chr}}/chr{{chr}}.{ext}", dir=config["rawvcfdir"], ext=config["rawvcfext"])
 	output:
 		rare="vcfs/chr{chr}.ma.aa.singletons.vcf.gz",
-		common="vcfs/chr{chr}.ma.aa.common.vcf.gz"
+		common="vcfs/chr{chr}.ma.aa.common.vcf.gz",
+		"summaries/common.full.summary",
+		"summaries/singletons.full.summary"
 	shell:
 		"""
-		test {output.rare} {output.common}
-		test {input.vcf}
+		perl data_mgmt/data_prep/vcf_to_summary.pl \"ma.aa.singletons.vcf.gz\" \"ma.aa.common.vcf.gz\"
 		"""
 
 
