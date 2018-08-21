@@ -27,7 +27,7 @@ rule vcfSummary:
 	output:
 		"summaries/common.full.summary",
 		"summaries/singletons.full.summary",
-		rare=expand("vcfs/chr{chr}.ma.aa.common.vcf.gz", chr=CHROMOSOMES),
+		rare=expand("vcfs/chr{chr}.ma.aa.singletons.vcf.gz", chr=CHROMOSOMES),
 		common=expand("vcfs/chr{chr}.ma.aa.common.vcf.gz", chr=CHROMOSOMES)
 	shell:
 		"""
