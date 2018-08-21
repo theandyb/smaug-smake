@@ -19,11 +19,6 @@ REFERENCEDIR = "reference_data"
 
 configfile: "config.yaml"
 
-def rawVCFs(wildcards):
-	chrom = [int(s) for s in wildcards.chr.split() if s.isdigit()][0]
-	vcf = config["rawvcfdir"] + "/chr" + chrom + "/chr" + chrom + config["rawvcfext"]
-	return [vcf]
-
 rule all_vcf:
 	input:
 		expand("vcfs/chr{chr}.{vcf}.ma.aa.common.vcf.gz", chr=CHROMOSOMES, vcf=config["rawvcfext"].split(".vcf")[0]),
@@ -33,7 +28,7 @@ rule vcfSummary:
 	input:
 		anc=expand("reference_data/human_ancestor_GRCh37_e59/human_ancestor_{chr}.fa.gz", chr=CHROMOSOMES),
 		fasta=expand("reference_data/human_g1k_v37/chr{chr}.fasta.gz", chr=CHROMOSOMES),
-		vcf=rawVCFs
+		vcf=expand("{dir}/chr{chr}/chr{chr}.{ext}", chr=CHROMOSOMES, dir=config["rawvcfdir"], ext=config["rawvcfext"])
 	output:
 		rare="vcfs/chr{chr}.{ext}.ma.aa.singletons.vcf.gz",
 		common="vcfs/chr{chr}.{ext}.ma.aa.common.vcf.gz"
