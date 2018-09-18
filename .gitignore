@@ -1,2 +1,5 @@
 reference_data
 .snakemake
+DNMs/
+summaries/
+vcfs/
