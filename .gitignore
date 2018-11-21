@@ -3,3 +3,9 @@ reference_data
 DNMs/
 summaries/
 vcfs/
+output/
+slurm/
+vcfs/
+images/
+motif_counts/
+singletons/
